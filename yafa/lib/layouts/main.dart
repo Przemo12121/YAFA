@@ -6,13 +6,14 @@ class MainLayout extends StatelessWidget {
   final String title;
   final Widget body;
 
-  @override
+  // @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(title),
-        ),
-        body: body);
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(title),
+      ),
+      body: body
+    );
   }
 }

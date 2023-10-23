@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +14,13 @@ class LoginPage extends StatelessWidget {
       color: Theme.of(context).colorScheme.inversePrimary,
       child: Column(
         children: [
-          const Text("Sign in", style: TextStyle(fontSize: 28)),
+          const Text("Home", style: TextStyle(fontSize: 28)),
           TextButton(
-            child: const Text("Sign in", style: TextStyle(fontSize: 18)),
-            onPressed: () => FirebaseAuth.instance.signInWithPopup(GoogleAuthProvider()),
+            child: const Text("Sign out", style: TextStyle(fontSize: 18)),
+            onPressed: () => FirebaseAuth.instance.signOut(),
           )
-        ]),
+        ]
+      ),
     ));
   }
 }
