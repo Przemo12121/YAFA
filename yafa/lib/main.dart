@@ -44,14 +44,14 @@ class YafaState extends State<Yafa> {
 
   User? _user;
 
-  // @override
+  @override
   Widget build(BuildContext context) {
-    var body = _user == null ? LoginPage() : HomePage();
+    var body = _user == null ? const LoginPage() : const HomePage();
 
     return MaterialApp(
       title: 'YAFA',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 152, 109, 222)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 152, 109, 222)),
         useMaterial3: true,
       ),
       home: MainLayout(title: 'YAFA - Yet Another Forum App', body: body),

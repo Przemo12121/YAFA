@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:yafa/firebase_utils.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -17,7 +18,8 @@ class LoginPage extends StatelessWidget {
           const Text("Sign in", style: TextStyle(fontSize: 28)),
           TextButton(
             child: const Text("Sign in", style: TextStyle(fontSize: 18)),
-            onPressed: () => FirebaseAuth.instance.signInWithPopup(GoogleAuthProvider()),
+            onPressed: () async => await signInWithGoogle(),
+            // onPressed: () => FirebaseAuth.instance.signInWithRedirect(GoogleAuthProvider()),
           )
         ]),
     ));
