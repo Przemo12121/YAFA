@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:yafa/firebase_utils.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
           const Text("Home", style: TextStyle(fontSize: 28)),
           TextButton(
             child: const Text("Sign out", style: TextStyle(fontSize: 18)),
-            onPressed: () => FirebaseAuth.instance.signOut(),
+            onPressed: () => signOut(),
           )
         ]
       ),

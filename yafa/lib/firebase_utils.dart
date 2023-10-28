@@ -1,38 +1,38 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/foundation.dart';
+import "package:firebase_auth/firebase_auth.dart";
+import "package:google_sign_in/google_sign_in.dart";
+import "package:flutter/foundation.dart";
+
+List<String> scopes = ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"];
 
 Future<UserCredential> signInWithGoogle() async {
   if (defaultTargetPlatform == TargetPlatform.android) {
-    print("first");
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    GoogleSignIn().requestScopes(scopes);
 
-    print("2nd");
-    // Obtain the auth details from the request
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
-    print("3rd");
-    // Create a new credential
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
 
-    print(googleAuth?.accessToken ?? "XD");
-    // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
   else {
     GoogleAuthProvider googleProvider = GoogleAuthProvider();
 
-    googleProvider.addScope('https://www.googleapis.com/auth/userinfo.email');
-    googleProvider.addScope('https://www.googleapis.com/auth/userinfo.profile');
-    googleProvider.setCustomParameters({
-      'login_hint': 'user@example.com'
-    });
+    for (var scope in scopes) {
+      googleProvider.addScope(scope);
+    }
 
-    // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithPopup(googleProvider);
   }
+}
+
+void signOut() async {
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await GoogleSignIn().signOut();
+  }
+  
+  FirebaseAuth.instance.signOut();
 }

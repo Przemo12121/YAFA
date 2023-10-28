@@ -1,7 +1,7 @@
 .vscode/*
 
 yafa/.metadata
-yafa/debug.keystore
+yafa/android/app/debug.keystore
 yafa/android/app/google-services.json
 
 # Miscellaneous

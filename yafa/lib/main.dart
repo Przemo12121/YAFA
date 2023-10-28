@@ -3,6 +3,7 @@ import 'package:yafa/layouts/main.dart';
 import 'package:yafa/pages/home.dart';
 import 'package:yafa/pages/login.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:yafa/styles.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -29,13 +30,6 @@ class YafaState extends State<Yafa> {
       .instance
       .userChanges()
       .listen((User? user) {
-        if (user == null) {
-          print("signed out");
-        }
-        else {
-          print("signed in");
-        }
-
         setState(() {
           _user = user;
         });
@@ -51,8 +45,24 @@ class YafaState extends State<Yafa> {
     return MaterialApp(
       title: 'YAFA',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 152, 109, 222)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: orange, 
+          primary: orange,
+          secondary: white,
+          background: white,
+        ),
         useMaterial3: true,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(red),
+            foregroundColor: MaterialStateProperty.all(white),
+            textStyle: MaterialStateProperty.all(buttonTextStyle),
+            padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(16, 0, 16, 0)),
+            elevation: MaterialStateProperty.all(3.0),
+            shape: MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)))),
+            
+          )
+        ),
       ),
       home: MainLayout(title: 'YAFA - Yet Another Forum App', body: body),
     );
