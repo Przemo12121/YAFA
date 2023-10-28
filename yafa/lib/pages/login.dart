@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:yafa/components/StyledContainer.dart';
+import 'package:yafa/firebase_utils.dart';
+import 'package:yafa/styles.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -7,19 +10,17 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-      height: 160,
-      width: 200,
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-      color: Theme.of(context).colorScheme.inversePrimary,
-      child: Column(
-        children: [
-          const Text("Sign in", style: TextStyle(fontSize: 28)),
-          TextButton(
-            child: const Text("Sign in", style: TextStyle(fontSize: 18)),
-            onPressed: () => FirebaseAuth.instance.signInWithPopup(GoogleAuthProvider()),
-          )
-        ]),
-    ));
+      child: StyledContainer(
+        height: 80,
+        width: 260,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Sign in", style: titleTextStyle),
+            SignInButton(Buttons.Google, onPressed: () async => await signInWithGoogle())
+          ]
+        ),
+      )
+    );
   }
 }
