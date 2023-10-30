@@ -1,4 +1,8 @@
+.vscode/*
+
 yafa/.metadata
+yafa/android/app/debug.keystore
+yafa/android/app/google-services.json
 
 # Miscellaneous
 *.class

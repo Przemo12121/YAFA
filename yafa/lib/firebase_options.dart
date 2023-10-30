@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: '',
-    appId: '',
-    messagingSenderId: '',
-    projectId: '',
-    authDomain: '',
-    storageBucket: '',
+    apiKey: 'AIzaSyC2GXubltHQgFx8G3JoxNsDnrBlj3J7qKc',
+    appId: '1:932119232004:web:7bb40f2893f59796b1ff51',
+    messagingSenderId: '932119232004',
+    projectId: 'yafa-b5643',
+    authDomain: 'yafa-b5643.firebaseapp.com',
+    storageBucket: 'yafa-b5643.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: '',
-    appId: '',
-    messagingSenderId: '',
-    projectId: '',
-    storageBucket: '',
+    apiKey: 'AIzaSyB03T6BK1Jb768FzTLJ6731Sa4Bx3g3smg',
+    appId: '1:932119232004:android:2d7489caa8d706cdb1ff51',
+    messagingSenderId: '932119232004',
+    projectId: 'yafa-b5643',
+    storageBucket: 'yafa-b5643.appspot.com',
   );
 }
