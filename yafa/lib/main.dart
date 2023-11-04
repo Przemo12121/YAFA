@@ -40,7 +40,7 @@ class YafaState extends State<Yafa> {
 
   @override
   Widget build(BuildContext context) {
-    var body = _user == null ? const LoginPage() : const HomePage();
+    var body = _user == null ? const LoginPage() : HomePage(user: _user!);
 
     return MaterialApp(
       title: 'YAFA',
@@ -52,6 +52,11 @@ class YafaState extends State<Yafa> {
           background: white,
         ),
         useMaterial3: true,
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: red,
+          foregroundColor: white,
+          iconSize: 48
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(red),
@@ -60,11 +65,10 @@ class YafaState extends State<Yafa> {
             padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(16, 0, 16, 0)),
             elevation: MaterialStateProperty.all(3.0),
             shape: MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)))),
-            
           )
         ),
       ),
-      home: MainLayout(title: 'YAFA - Yet Another Forum App', body: body),
+      home: MainLayout(title: 'YAFA - Yet Another Forum App', body: body, user: _user),
     );
   }
 }

@@ -10,7 +10,24 @@ var titleTextStyle = TextStyle(
   fontWeight: FontWeight.bold
 );
 
+var listTitleTextStyle = TextStyle(
+  color: orange,
+  fontSize: 18,
+  fontWeight: FontWeight.bold,
+);
+
+var postTitleTextStyle = TextStyle(
+  color: orange,
+  fontSize: 18,
+  fontWeight: FontWeight.bold
+);
+
 var buttonTextStyle = TextStyle(
   color: white,
   fontSize: 16
+);
+
+var subTextStyle = TextStyle(
+  color: red,
+  fontSize: 12
 );
