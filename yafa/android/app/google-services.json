@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "932119232004",
+    "project_id": "yafa-b5643",
+    "storage_bucket": "yafa-b5643.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932119232004:android:2d7489caa8d706cdb1ff51",
+        "android_client_info": {
+          "package_name": "com.example.yafa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "932119232004-9gia14vip1vpuiplnu78bp1826ch0bkr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.yafa",
+            "certificate_hash": "c9e3142ca220638934779975651024f6183c138d"
+          }
+        },
+        {
+          "client_id": "932119232004-ra4t78t4ftfb8is4d1nsd3jdl8bp0lrk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB03T6BK1Jb768FzTLJ6731Sa4Bx3g3smg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "932119232004-ra4t78t4ftfb8is4d1nsd3jdl8bp0lrk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
