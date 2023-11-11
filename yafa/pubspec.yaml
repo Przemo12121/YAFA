@@ -40,7 +40,8 @@ dependencies:
   firebase_ui_oauth_google: ^1.2.13
   flutter_signin_button:
   google_sign_in: ^6.1.5
-
+  toast: ^0.2.9
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

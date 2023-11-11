@@ -14,3 +14,8 @@ List<PostModel> getPosts(String? search) {
     ? _posts
     : _posts.where((p) => p.author.email == search).toList();
 }
+
+
+void savePost(PostModel post) {
+  _posts.add(post);
+}

@@ -55,7 +55,7 @@ class YafaState extends State<Yafa> {
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: red,
           foregroundColor: white,
-          iconSize: 48
+          iconSize: 36
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(

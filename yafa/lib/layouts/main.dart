@@ -36,8 +36,13 @@ class MainLayout extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 5.0,
-        title: titleText),
-      body: body
+        title: titleText,
+        automaticallyImplyLeading: false,
+      ),
+      body: Container(
+        padding: const EdgeInsetsDirectional.fromSTEB(30, 40, 30, 0),
+        child: body
+      )
     );
   }
 }

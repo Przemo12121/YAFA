@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:yafa/firebase_utils.dart';
-import 'package:yafa/models/AccountModel.dart';
+import 'package:yafa/layouts/main.dart';
 import 'package:yafa/models/PostModel.dart';
+import 'package:yafa/pages/add_post.dart';
 import 'package:yafa/sources/postSource.dart';
 import 'package:yafa/styles.dart';
 
@@ -27,9 +27,7 @@ class HomePageState extends State<HomePage> {
     List<PostModel> posts = getPosts(search);    
     var title = _pickTitle(search, user);
 
-    // TODO: add return button
     return ListView(
-        padding: const EdgeInsetsDirectional.symmetric(vertical: 40, horizontal: 30),
         scrollDirection: Axis.vertical,
         children: [
           Container(child: title, margin: const EdgeInsets.fromLTRB(0, 0, 0, 32)), 
@@ -40,6 +38,7 @@ class HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FloatingActionButton(
+                  heroTag: 'clear_search_btn',
                   onPressed: () { 
                     setState(() {
                       search = null;
@@ -48,6 +47,7 @@ class HomePageState extends State<HomePage> {
                   child: const Icon(Icons.search_off),
                 ),
                 FloatingActionButton(
+                  heroTag: 'search_btn',
                   onPressed: () { 
                     // TODO: search by author email
                     // setState(() {
@@ -57,11 +57,23 @@ class HomePageState extends State<HomePage> {
                   child: const Icon(Icons.search),
                 ),
                 FloatingActionButton(
-                  onPressed: () { 
-                    // TODO: add post
-                    // setState(() {
-                    //   search = null;
-                    // });
+                  heroTag: 'add_post_btn',
+                  onPressed: () async {
+                    bool postAdded = await Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) => MainLayout(
+                        title: 'YAFA - Yet Another Forum App', 
+                        body: AddPostPage(user: user), 
+                        user: user)
+                      )
+                    );
+
+                    if (postAdded && (search == null || search!.isEmpty || search == user.email)) {
+                      setState(() {
+                        search = search;
+                      });
+                    }
                   },
                   child: const Icon(Icons.add),
                 )
