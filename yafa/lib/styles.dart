@@ -22,6 +22,16 @@ var postTitleTextStyle = TextStyle(
   fontWeight: FontWeight.bold
 );
 
+var commentAuthorTextStyle = TextStyle(
+  color: orange,
+  fontSize: 14,
+);
+
+var commentContentTextStyle = const TextStyle(
+  color: Colors.black,
+  fontSize: 14,
+);
+
 var buttonTextStyle = TextStyle(
   color: white,
   fontSize: 16

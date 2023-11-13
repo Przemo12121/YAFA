@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:yafa/layouts/main.dart';
 import 'package:yafa/models/PostModel.dart';
 import 'package:yafa/pages/add_post.dart';
+import 'package:yafa/pages/post_page.dart';
 import 'package:yafa/sources/postSource.dart';
 import 'package:yafa/styles.dart';
 
@@ -119,8 +120,18 @@ class HomePageState extends State<HomePage> {
                 TextSpan(text: ", ${e.value.addedAt.day}.${e.value.addedAt.month}.${e.value.addedAt.year}"),
               ]
             ),
-          ) 
-          // onTap: () {} // TODO: navigate to post page
+          ) ,
+          onTap: () async {
+            await Navigator.push(
+              context, 
+              MaterialPageRoute(
+                builder: (context) => MainLayout(
+                title: 'YAFA - Yet Another Forum App', 
+                body: PostPage(user: user, post: e.value), 
+                user: user)
+              )
+            );
+          }
         ),
       ))
       .toList();
