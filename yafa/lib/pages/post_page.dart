@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:yafa/components/comment_dialog.dart';
+import 'package:yafa/models/AccountModel.dart';
+import 'package:yafa/models/CommentModel.dart';
 import 'package:yafa/models/PostModel.dart';
 import 'package:yafa/styles.dart';
 
@@ -67,9 +69,24 @@ class PostPageState extends State<PostPage> {
                 ),
                 FloatingActionButton(
                   heroTag: 'add_comment_btn',
-                  onPressed: () async {
-                    // TODO add comment
-                  },
+                  onPressed: () => showDialog(
+                    context: context, 
+                    builder: (BuildContext context) => CommentDialog(
+                      onAccept: (content) => {
+                        if (content.isNotEmpty) {
+                          setState(() {
+                            post.comments.add(
+                              CommentModel(
+                                author: AccountModel(email: user.email!, displayName: user.displayName!),
+                                content: content,
+                                addedAt: DateTime.now()
+                              )
+                            );
+                          })
+                        }
+                      }
+                    )
+                  ),
                   child: const Icon(Icons.comment),
                 )
               ]

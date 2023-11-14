@@ -31,10 +31,10 @@ class AddPostPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Title:", style: postTitleTextStyle),
-                TextField(autofocus: true, onChanged: (value) => _title = value),
+                TextField(autofocus: true, maxLines: null, onChanged: (value) => _title = value),
                 Container(height: 78),
                 Text("Content:", style: postTitleTextStyle),
-                TextField(onChanged: (value) => _content = value),
+                TextField(maxLines: null, onChanged: (value) => _content = value),
               ],
             ),
           )
