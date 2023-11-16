@@ -1,8 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:yafa/models/AccountModel.dart';
-import 'package:yafa/models/CommentModel.dart';
-import 'package:yafa/models/PostModel.dart';
 import 'package:yafa/sources/postSource.dart';
 import 'package:yafa/styles.dart';
 import 'package:toast/toast.dart';
@@ -50,7 +47,7 @@ class AddPostPage extends StatelessWidget {
             FloatingActionButton(
               heroTag: 'create_btn',
               child: const Icon(Icons.create),
-              onPressed: () => _handleSubmit(context)
+              onPressed: () => _handleSubmit(context, user)
             ),
           ],
         ),
@@ -58,7 +55,7 @@ class AddPostPage extends StatelessWidget {
     );
   }
 
-  void _handleSubmit(BuildContext context) {
+  void _handleSubmit(BuildContext context, User user) async {
     if (_title.isEmpty) {
       Toast.show(
         "Title cannot be empty.", 
@@ -70,18 +67,7 @@ class AddPostPage extends StatelessWidget {
       return;
     }
 
-    savePost(
-      PostModel(
-        author: AccountModel(
-          displayName: user.displayName, 
-          email: user.email!
-        ), 
-        title: _title, 
-        content: _content, 
-        comments: <CommentModel>[], 
-        addedAt: DateTime.now()
-      )
-    );
+    await createNew(user, _title, _content);
     Navigator.pop(context, true);
   }
 }

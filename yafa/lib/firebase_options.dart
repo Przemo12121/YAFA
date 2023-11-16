@@ -55,6 +55,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '932119232004',
     projectId: 'yafa-b5643',
     authDomain: 'yafa-b5643.firebaseapp.com',
+    databaseURL: 'https://yafa-b5643-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'yafa-b5643.appspot.com',
   );
 
@@ -63,6 +64,7 @@ class DefaultFirebaseOptions {
     appId: '1:932119232004:android:2d7489caa8d706cdb1ff51',
     messagingSenderId: '932119232004',
     projectId: 'yafa-b5643',
+    databaseURL: 'https://yafa-b5643-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'yafa-b5643.appspot.com',
   );
 }
