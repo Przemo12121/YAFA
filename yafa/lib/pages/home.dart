@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:yafa/layouts/main.dart';
-import 'package:yafa/models/PostModel.dart';
+import 'package:yafa/models/PostTileModel.dart';
 import 'package:yafa/pages/add_post.dart';
 import 'package:yafa/pages/post_page.dart';
 import 'package:yafa/sources/postSource.dart';
@@ -22,17 +22,42 @@ class HomePageState extends State<HomePage> {
   
   String? search;
   final User user;
+  Future<List<PostTileModel>>? _postsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _postsFuture = getPosts(search);
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<PostModel> posts = getPosts(search);    
     var title = _pickTitle(search, user);
 
     return ListView(
         scrollDirection: Axis.vertical,
         children: [
           Container(child: title, margin: const EdgeInsets.fromLTRB(0, 0, 0, 32)), 
-          ..._mapPosts(posts),
+          FutureBuilder(
+            future: _postsFuture, 
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+
+              if (!snapshot.hasData) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 124),
+                  child: const CircularProgressIndicator()
+                );
+              }
+
+              return Wrap(
+                children: _mapPosts(snapshot.data!),
+              );
+            }
+          ),
           Container(
             margin: const EdgeInsets.fromLTRB(0, 32, 0, 0),
             child: Row(
@@ -42,7 +67,7 @@ class HomePageState extends State<HomePage> {
                   heroTag: 'clear_search_btn',
                   onPressed: () { 
                     setState(() {
-                      search = null;
+                      _postsFuture = getPosts(null);
                     });
                   },
                   child: const Icon(Icons.search_off),
@@ -72,7 +97,8 @@ class HomePageState extends State<HomePage> {
 
                     if (postAdded && (search == null || search!.isEmpty || search == user.email)) {
                       setState(() {
-                        search = search;
+                        // TODO: optimise
+                        _postsFuture = getPosts(search);
                       });
                     }
                   },
@@ -97,8 +123,8 @@ class HomePageState extends State<HomePage> {
     return Text("Posts for: $search", style: listTitleTextStyle);
   }
 
-  List<Widget> _mapPosts(List<PostModel> posts) => 
-    posts.asMap().entries
+  List<Widget> _mapPosts(List<PostTileModel>? posts) => 
+    posts?.asMap().entries
       .map((e) => Card(
         child: ListTile(
           title: Text(e.value.title, style: postTitleTextStyle),
@@ -122,17 +148,19 @@ class HomePageState extends State<HomePage> {
             ),
           ) ,
           onTap: () async {
+            var details = await getPost(e.value.id);
+
             await Navigator.push(
               context, 
               MaterialPageRoute(
                 builder: (context) => MainLayout(
                 title: 'YAFA - Yet Another Forum App', 
-                body: PostPage(user: user, post: e.value), 
+                body: PostPage(user: user, post: details), 
                 user: user)
               )
             );
           }
         ),
       ))
-      .toList();
+      .toList() ?? <Card>[];
 }

@@ -4,6 +4,7 @@ import 'package:yafa/components/comment_dialog.dart';
 import 'package:yafa/models/AccountModel.dart';
 import 'package:yafa/models/CommentModel.dart';
 import 'package:yafa/models/PostModel.dart';
+import 'package:yafa/sources/postSource.dart';
 import 'package:yafa/styles.dart';
 
 class PostPage extends StatefulWidget {
@@ -21,6 +22,16 @@ class PostPageState extends State<PostPage> {
 
   final PostModel post;
   final User user;
+
+  @override
+  void initState() {
+    super.initState();
+    syncroniseComments(post.id, (newComment) {
+      setState(() {
+        post.comments.add(newComment);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

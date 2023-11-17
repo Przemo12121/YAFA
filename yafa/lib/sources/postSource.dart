@@ -1,53 +1,109 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:yafa/models/CommentModel.dart';
-import 'package:yafa/models/PostModel.dart';
 import 'package:yafa/models/AccountModel.dart';
 import 'package:uuid/uuid.dart';
+import 'package:yafa/models/CommentModel.dart';
+import 'package:yafa/models/PostModel.dart';
 import 'dart:convert';
+import 'package:yafa/models/PostTileModel.dart';
 
 FirebaseDatabase database = FirebaseDatabase.instance;
 Codec<String, String> stringToBase64 = utf8.fuse(base64);
+var idProvider = const Uuid();
+var maxAddedAt = 8640000000000000000;
 
-var _a1 = AccountModel(email: "aaa@bbb.ccc", displayName: "Aaa Bbb");
-var _a2 = AccountModel(email: "xyz@xyz.xyz", displayName: "Xyz Xyz");
-
-var _posts = <PostModel>[
-  PostModel(const Uuid(), author: _a1, 
-    title: "Aaa1 bardzo długi tytuł bardzo długi tytułbardzo długi tytułbardzo długi tytułbardzo długi tytułbardzo długi tytułbardzo długi tytułbardzo długi tytułbardzo długi tytułbardzo długi tytuł", 
-    content: "Coś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tamCoś tam", 
-    comments: [
-      CommentModel(author: _a1, content: "jakis komentarz", addedAt: DateTime.now()),
-      CommentModel(author: _a2, content: "jakis komentarz 2", addedAt: DateTime.now()),
-      CommentModel(author: _a2, content: "jakis komentarz 3", addedAt: DateTime.now()),
-      CommentModel(author: _a2, content: "jakis komentarz 4", addedAt: DateTime.now()),
-    ], 
-    addedAt: DateTime.now()
-  ),
-  PostModel(const Uuid(), author: _a1, title: "Aaa2", content: "Coś tam 2", comments: List.empty(), addedAt: DateTime.now()),
-  PostModel(const Uuid(),author: _a2, title: "Xyz1", content: "Coś tam 3", comments: List.empty(), addedAt: DateTime.now()),
-  PostModel(const Uuid(),author: _a1, title: "Aaa3", content: "Coś tam 4", comments: List.empty(), addedAt: DateTime.now()),
-  PostModel(const Uuid(),author: _a2, title: "Xyz2", content: "Coś tam 5", comments: List.empty(), addedAt: DateTime.now()),
-  PostModel(const Uuid(),author: _a2, title: "Xyz2", content: "Coś tam 5", comments: List.empty(), addedAt: DateTime.now()),
-];
-
-List<PostModel> getPosts(String? search) {
-  return search == null || search.isEmpty
-    ? _posts
-    : _posts.where((p) => p.author.email == search).toList();
+Future<List<PostTileModel>> getPosts(String? search) async {
+  return (await database.ref("postTiles")
+    .orderByChild("sort_addedAt")
+    .get())
+    .children
+    .map(
+      (child) => PostTileModel(
+        child.key!, 
+        author: AccountModel(
+          email: child.child("authorEmail").value as String, 
+          displayName: child.child("authorName").value as String, 
+        ), 
+        title: child.child("title").value as String, 
+        addedAt: DateTime.fromMicrosecondsSinceEpoch(child.child("addedAt").value as int)
+      )
+    )
+    .toList();
 }
 
+Future<void> addComment(String postId, String content, User commenter) async {
+  var addedAt = DateTime.now().microsecondsSinceEpoch;
+
+  await database.ref("comments/$postId")
+    .push()
+    .set({
+      "postId": postId,
+      "authorName": commenter.displayName ?? "",
+      "authorEmail": commenter.email!,
+      "content": content,
+      "addedAt": addedAt,
+      "sort_AddedAt": maxAddedAt - addedAt,
+    });
+}
+
+Future<PostModel> getPost(String id) async {
+  var postData = (await database.ref("posts/$id").once()).snapshot;
+
+  return PostModel(
+    postData.key!, 
+    author: AccountModel(
+      email: postData.child("authorEmail").value as String,
+      displayName: postData.child("authorName").value as String,
+    ), 
+    title: postData.child("title").value as String, 
+    content: postData.child("content").value as String, 
+    comments: <CommentModel>[], 
+    addedAt: DateTime.fromMicrosecondsSinceEpoch(postData.child("addedAt").value as int)
+  );
+}
+
+void syncroniseComments(String postId, Function(CommentModel newComment) onNewComment) {
+  database
+    .ref('comments/$postId')
+    .onChildAdded
+    .listen((event) { 
+      final data = event.snapshot;
+
+      var newComment = CommentModel(
+        author: AccountModel(
+          email: data.child("authorEmail").value as String,
+          displayName: data.child("authorName").value as String,
+        ), 
+        content: data.child("content").value as String, 
+        addedAt: DateTime.fromMicrosecondsSinceEpoch(data.child("addedAt").value as int)
+      );
+
+      onNewComment(newComment);
+    });
+}
 
 Future<void> createNew(User author, String title, String content) async {
-  var emailEncoded = stringToBase64.encode(author.email!);
-  var postId = const Uuid().v4();
+  var postId = idProvider.v4();
+  var addedAt = DateTime.now().microsecondsSinceEpoch;
 
   await database
-    .ref("users/$emailEncoded/posts/$postId")
+    .ref("posts/$postId")
     .set({
+      "authorEmail": author.email!,
+      "authorName": author.displayName ?? "",
       "title": title,
       "content": content,
-      "comments": [],
-      "addedAt": DateTime.now().toString()
+      "addedAt": addedAt
+    });
+  
+  await database
+    .ref("postTiles/$postId")
+    .set({
+      "id": postId,
+      "title": title,
+      "addedAt": addedAt,
+      "authorEmail": author.email,
+      "authorName": author.displayName,
+      "sort_addedAt": maxAddedAt - addedAt
     });
 }
