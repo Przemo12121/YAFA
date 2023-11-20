@@ -83,17 +83,9 @@ class PostPageState extends State<PostPage> {
                   onPressed: () => showDialog(
                     context: context, 
                     builder: (BuildContext context) => CommentDialog(
-                      onAccept: (content) => {
+                      onAccept: (content) async => {
                         if (content.isNotEmpty) {
-                          setState(() {
-                            post.comments.add(
-                              CommentModel(
-                                author: AccountModel(email: user.email!, displayName: user.displayName!),
-                                content: content,
-                                addedAt: DateTime.now()
-                              )
-                            );
-                          })
+                          await addComment(post.id, content, user)
                         }
                       }
                     )

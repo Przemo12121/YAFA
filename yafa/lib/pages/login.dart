@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yafa/components/StyledContainer.dart';
+import 'package:yafa/components/styled_container.dart';
 import 'package:yafa/firebase_utils.dart';
 import 'package:yafa/styles.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';

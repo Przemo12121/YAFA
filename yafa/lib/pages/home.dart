@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:yafa/components/search_dialog.dart';
 import 'package:yafa/layouts/main.dart';
 import 'package:yafa/models/PostTileModel.dart';
 import 'package:yafa/pages/add_post.dart';
@@ -14,13 +15,14 @@ class HomePage extends StatefulWidget {
   final User user;
 
   @override
-  State<StatefulWidget> createState() => HomePageState(user: user, search: null);
+  State<StatefulWidget> createState() => HomePageState(user: user);
 }
 
 class HomePageState extends State<HomePage> {
-  HomePageState({required this.user, required this.search});
+  HomePageState({required this.user});
   
-  String? search;
+  String? searchAuthor;
+  String? searchTitle;
   final User user;
   Future<List<PostTileModel>>? _postsFuture;
 
@@ -28,12 +30,12 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    _postsFuture = getPosts(search);
+    _postsFuture = getPosts(null, null);
   }
 
   @override
   Widget build(BuildContext context) {
-    var title = _pickTitle(search, user);
+    var title = _pickTitle(searchAuthor, user);
 
     return ListView(
         scrollDirection: Axis.vertical,
@@ -67,19 +69,29 @@ class HomePageState extends State<HomePage> {
                   heroTag: 'clear_search_btn',
                   onPressed: () { 
                     setState(() {
-                      _postsFuture = getPosts(null);
+                      searchAuthor = null;
+                      searchTitle = null;
+                      _postsFuture = getPosts(null, null);
                     });
                   },
                   child: const Icon(Icons.search_off),
                 ),
                 FloatingActionButton(
                   heroTag: 'search_btn',
-                  onPressed: () { 
-                    // TODO: search by author email
-                    // setState(() {
-                    //   search = null;
-                    // });
-                  },
+                  onPressed: () => showDialog(
+                    context: context, 
+                    builder: (BuildContext context) => SearchDialog(
+                      onAccept: (author, title) {
+                        if (author != searchAuthor || title != searchTitle) {
+                          setState(() {
+                            searchAuthor = author;
+                            searchTitle = title;
+                            _postsFuture = getPosts(searchAuthor, searchTitle);
+                          });
+                        }
+                      }
+                    )
+                  ),
                   child: const Icon(Icons.search),
                 ),
                 FloatingActionButton(
@@ -95,10 +107,9 @@ class HomePageState extends State<HomePage> {
                       )
                     );
 
-                    if (postAdded && (search == null || search!.isEmpty || search == user.email)) {
+                    if (postAdded && (searchAuthor == null || searchAuthor!.isEmpty || searchAuthor == user.email)) {
                       setState(() {
-                        // TODO: optimise
-                        _postsFuture = getPosts(search);
+                        _postsFuture = getPosts(searchAuthor, searchTitle);
                       });
                     }
                   },
@@ -139,7 +150,8 @@ class HomePageState extends State<HomePage> {
                   recognizer: TapGestureRecognizer()
                     ..onTap = () { 
                       setState(() {
-                        search = e.value.author.email;
+                        searchAuthor = e.value.author.email;
+                        _postsFuture = getPosts(searchAuthor, null);
                       }); 
                     }
                 ),

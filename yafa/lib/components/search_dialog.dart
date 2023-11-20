@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:yafa/styles.dart';
 
-class CommentDialog extends StatelessWidget {
-  CommentDialog({super.key, required this.onAccept});
+class SearchDialog extends StatelessWidget {
+  SearchDialog({super.key, required this.onAccept});
 
-  String _content = "";
-  final Future<void> Function(String content) onAccept;
+  String _title = "";
+  String _author = "";
+  final void Function(String author, String title) onAccept;
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +17,13 @@ class CommentDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            TextField(autofocus: true, maxLines: null, onChanged: (value) => _content = value),
+            const Text("Author:"),
+            TextField(autofocus: true, maxLines: null, onChanged: (value) => _author = value),
+            const SizedBox(height: 24),
+            const Text("Title:"),
+            TextField(autofocus: true, maxLines: null, onChanged: (value) => _title = value),
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -28,7 +34,7 @@ class CommentDialog extends StatelessWidget {
                 ),
                 FloatingActionButton(
                   onPressed: () { 
-                    onAccept(_content); 
+                    onAccept(_author, _title); 
                     Navigator.pop(context);
                   },
                   child: const Icon(Icons.comment),

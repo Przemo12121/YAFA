@@ -6,14 +6,16 @@ import 'package:yafa/models/CommentModel.dart';
 import 'package:yafa/models/PostModel.dart';
 import 'dart:convert';
 import 'package:yafa/models/PostTileModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-FirebaseDatabase database = FirebaseDatabase.instance;
+FirebaseDatabase realTimeDatabase = FirebaseDatabase.instance;
+// FirebaseFirestore firestoreDatabase = FirebaseFirestore.instance;
 Codec<String, String> stringToBase64 = utf8.fuse(base64);
 var idProvider = const Uuid();
 var maxAddedAt = 8640000000000000000;
 
-Future<List<PostTileModel>> getPosts(String? search) async {
-  return (await database.ref("postTiles")
+Future<List<PostTileModel>> getPosts(String? searchAuthor, String? searchTitle) async {
+  var posts = (await realTimeDatabase.ref("postTiles")
     .orderByChild("sort_addedAt")
     .get())
     .children
@@ -27,14 +29,50 @@ Future<List<PostTileModel>> getPosts(String? search) async {
         title: child.child("title").value as String, 
         addedAt: DateTime.fromMicrosecondsSinceEpoch(child.child("addedAt").value as int)
       )
-    )
-    .toList();
+    );
+    
+  if (searchAuthor != null && searchAuthor.isNotEmpty) {
+    posts = posts.where((post) => post.author.email.contains(searchAuthor));
+  }
+  if (searchTitle != null && searchTitle.isNotEmpty) {
+    posts = posts.where((post) => post.title.toLowerCase().contains(searchTitle.toLowerCase()));
+  }
+
+  return posts.toList();
+  // firestore indexes issue
+  // var query = firestoreDatabase.collection("postTiles")
+  //   .orderBy("addedAt", descending: true)
+  //   .where("authorEmail", isEqualTo: "250147@student.pwr.edu.pl");
+
+  // // if (searchAuthor != null && searchAuthor.isNotEmpty) {
+  // //   query = query
+  // //     .where("authorEmail", arrayContains: searchAuthor);
+  // //     // .where('authorEmail', isGreaterThanOrEqualTo: searchAuthor)
+  // //     // .where('authorEmail', isLessThan: searchAuthor+'z');
+  // // }
+
+  // return (await query.get()).docs.map(
+  //   (doc) => PostTileModel(
+  //     doc.get("id") as String, 
+  //     author: AccountModel(
+  //       email: doc.get("authorEmail") as String,
+  //       displayName: doc.get("authorName") as String
+  //     ), 
+  //     title: doc.get("title") as String, 
+  //     addedAt: DateTime.fromMicrosecondsSinceEpoch(doc.get("addedAt") as int)
+  //   )
+  // ).toList();
+
+  // return await firestoreDatabase
+  //   .collection("postTiles")
+
+  //   .get(GetOptions());
 }
 
 Future<void> addComment(String postId, String content, User commenter) async {
   var addedAt = DateTime.now().microsecondsSinceEpoch;
 
-  await database.ref("comments/$postId")
+  await realTimeDatabase.ref("comments/$postId")
     .push()
     .set({
       "postId": postId,
@@ -47,7 +85,7 @@ Future<void> addComment(String postId, String content, User commenter) async {
 }
 
 Future<PostModel> getPost(String id) async {
-  var postData = (await database.ref("posts/$id").once()).snapshot;
+  var postData = (await realTimeDatabase.ref("posts/$id").once()).snapshot;
 
   return PostModel(
     postData.key!, 
@@ -63,7 +101,7 @@ Future<PostModel> getPost(String id) async {
 }
 
 void syncroniseComments(String postId, Function(CommentModel newComment) onNewComment) {
-  database
+  realTimeDatabase
     .ref('comments/$postId')
     .onChildAdded
     .listen((event) { 
@@ -86,7 +124,7 @@ Future<void> createNew(User author, String title, String content) async {
   var postId = idProvider.v4();
   var addedAt = DateTime.now().microsecondsSinceEpoch;
 
-  await database
+  await realTimeDatabase
     .ref("posts/$postId")
     .set({
       "authorEmail": author.email!,
@@ -95,8 +133,8 @@ Future<void> createNew(User author, String title, String content) async {
       "content": content,
       "addedAt": addedAt
     });
-  
-  await database
+
+  await realTimeDatabase
     .ref("postTiles/$postId")
     .set({
       "id": postId,
@@ -106,4 +144,14 @@ Future<void> createNew(User author, String title, String content) async {
       "authorName": author.displayName,
       "sort_addedAt": maxAddedAt - addedAt
     });
+  
+  // await firestoreDatabase
+  //   .collection("postTiles")
+  //   .add({
+  //     "id": postId,
+  //     "title": title,
+  //     "addedAt": addedAt,
+  //     "authorEmail": author.email,
+  //     "authorName": author.displayName,
+  //   });
 }
