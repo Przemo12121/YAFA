@@ -8,6 +8,7 @@ import 'package:yafa/pages/add_post.dart';
 import 'package:yafa/pages/post_page.dart';
 import 'package:yafa/sources/postSource.dart';
 import 'package:yafa/styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.user});
@@ -101,7 +102,7 @@ class HomePageState extends State<HomePage> {
                       context, 
                       MaterialPageRoute(
                         builder: (context) => MainLayout(
-                        title: 'YAFA - Yet Another Forum App', 
+                        title: AppLocalizations.of(context)!.appTitle, 
                         body: AddPostPage(user: user), 
                         user: user)
                       )
@@ -123,15 +124,15 @@ class HomePageState extends State<HomePage> {
   }
 
   Text _pickTitle(String? search, User user) {
-    if (search == null || search!.isEmpty) {
-      return Text("Recent posts", style: listTitleTextStyle);
+    if (search == null || search.isEmpty) {
+      return Text(AppLocalizations.of(context)!.recentPosts, style: listTitleTextStyle);
     }
 
     if (search == user.email!) {
-      return Text("My posts", style: listTitleTextStyle);
+      return Text(AppLocalizations.of(context)!.myPosts, style: listTitleTextStyle);
     }
     
-    return Text("Posts for: $search", style: listTitleTextStyle);
+    return Text("${AppLocalizations.of(context)!.searchedPosts} $search", style: listTitleTextStyle);
   }
 
   List<Widget> _mapPosts(List<PostTileModel>? posts) => 
@@ -166,7 +167,7 @@ class HomePageState extends State<HomePage> {
               context, 
               MaterialPageRoute(
                 builder: (context) => MainLayout(
-                title: 'YAFA - Yet Another Forum App', 
+                title: AppLocalizations.of(context)!.appTitle, 
                 body: PostPage(user: user, post: details), 
                 user: user)
               )

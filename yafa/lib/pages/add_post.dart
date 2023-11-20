@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:yafa/sources/postSource.dart';
 import 'package:yafa/styles.dart';
 import 'package:toast/toast.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddPostPage extends StatelessWidget {
   AddPostPage({super.key, required this.user});
@@ -18,7 +19,7 @@ class AddPostPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Create new post", style: listTitleTextStyle),
+        Text(AppLocalizations.of(context)!.createPost, style: listTitleTextStyle),
         Card(
           margin: const EdgeInsets.fromLTRB(0, 32, 0, 32),
           child: Container(
@@ -27,10 +28,10 @@ class AddPostPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Title:", style: postTitleTextStyle),
+                Text(AppLocalizations.of(context)!.author, style: postTitleTextStyle),
                 TextField(autofocus: true, maxLines: null, onChanged: (value) => _title = value),
                 Container(height: 78),
-                Text("Content:", style: postTitleTextStyle),
+                Text(AppLocalizations.of(context)!.content, style: postTitleTextStyle),
                 TextField(maxLines: null, onChanged: (value) => _content = value),
               ],
             ),
@@ -58,7 +59,7 @@ class AddPostPage extends StatelessWidget {
   void _handleSubmit(BuildContext context, User user) async {
     if (_title.isEmpty) {
       Toast.show(
-        "Title cannot be empty.", 
+        AppLocalizations.of(context)!.titleNotEmpty, 
         backgroundColor: orange, 
         textStyle: subTextStyle, 
         gravity: Toast.bottom,

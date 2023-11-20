@@ -1,0 +1,18 @@
+{
+  "@@locale": "de",
+  "appTitle": "YAFA - Eine Andere Forum-App",
+  "@appTitle": {
+    "description": "Main application title"
+  },
+  "author": "Autor:",
+  "title": "Titel:",
+  "content": "Inhalt:",
+  "signin": "Anmeldung",
+  "createPost": "Einen neuen Beitrag erstellen",
+  "titleNotEmpty": "Der Titel darf nicht leer sein.",
+  "comments": "Kommentare:",
+  "recentPosts": "Kürzliche Posts",
+  "myPosts": "Meine Posts",
+  "searchedPosts": "Beiträge, die dazu gehören:",
+  "googleSignIn": "Anmeldung mit Google"
+}

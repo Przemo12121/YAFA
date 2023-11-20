@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yafa/components/comment_dialog.dart';
-import 'package:yafa/models/AccountModel.dart';
-import 'package:yafa/models/CommentModel.dart';
 import 'package:yafa/models/PostModel.dart';
 import 'package:yafa/sources/postSource.dart';
 import 'package:yafa/styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({super.key, required this.post, required this.user});
@@ -66,7 +65,7 @@ class PostPageState extends State<PostPage> {
           ),
         ),
         const SizedBox(height: 36),
-        Text("Comments:", style: listTitleTextStyle),
+        Text(AppLocalizations.of(context)!.comments, style: listTitleTextStyle),
         ..._mapComments(post),
         Container(
             margin: const EdgeInsets.fromLTRB(0, 32, 0, 0),

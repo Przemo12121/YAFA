@@ -1,0 +1,18 @@
+{
+  "@@locale": "en",
+  "appTitle": "YAFA - Yet Another Forum App",
+  "@appTitle": {
+    "description": "Main application title"
+  },
+  "author": "Author:",
+  "title": "Title:",
+  "content": "Content:",
+  "signin": "Sign in",
+  "createPost": "Create new post",
+  "titleNotEmpty": "Title cannot be empty.",
+  "comments": "Comments:",
+  "recentPosts": "Recent posts",
+  "myPosts": "My posts",
+  "searchedPosts": "Posts belonging to:",
+  "googleSignIn": "Sign in with Google"
+}

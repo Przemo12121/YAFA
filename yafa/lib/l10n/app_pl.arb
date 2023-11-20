@@ -1,0 +1,18 @@
+{
+  "@@locale": "pl",
+  "appTitle": "YAFA - Kolejna Aplikacja Forum",
+  "@appTitle": {
+    "description": "Main application title"
+  },
+  "author": "Autor:",
+  "title": "Tytuł:",
+  "content": "Zawartość:",
+  "signin": "Zaloguj się",
+  "createPost": "Stwórz nowy post",
+  "titleNotEmpty": "Tytuł nie może być pusty.",
+  "comments": "Komentarze:",
+  "recentPosts": "Ostatnie posty",
+  "myPosts": "Moje posty",
+  "searchedPosts": "Posty należące do:",
+  "googleSignIn": "Zaloguj się z Google"
+}

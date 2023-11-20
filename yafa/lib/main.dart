@@ -6,6 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:yafa/styles.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +46,18 @@ class YafaState extends State<Yafa> {
 
     return MaterialApp(
       title: 'YAFA',
+      // locale: Locale("en"),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        AppLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale("en"),
+        Locale("pl"),
+        Locale("de"),
+      ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: orange, 
@@ -68,7 +82,9 @@ class YafaState extends State<Yafa> {
           )
         ),
       ),
-      home: MainLayout(title: 'YAFA - Yet Another Forum App', body: body, user: _user),
+      home: Builder(
+        builder: (context) => MainLayout(title: AppLocalizations.of(context)!.appTitle, body: body, user: _user),
+      ) 
     );
   }
 }
