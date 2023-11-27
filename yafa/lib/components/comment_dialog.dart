@@ -10,14 +10,14 @@ class CommentDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: orange,
+      backgroundColor: Theme.of(context).primaryColor,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(autofocus: true, maxLines: null, onChanged: (value) => _content = value),
+            TextField(autofocus: true, maxLines: null, onChanged: (value) => _content = value, style: TextStyle(color: Theme.of(context).primaryColor)),
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

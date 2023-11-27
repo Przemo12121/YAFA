@@ -15,11 +15,13 @@ class AddPostPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ToastContext().init(context);
+    var textFieldStyle = TextStyle(color: Theme.of(context).primaryColor);
+
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppLocalizations.of(context)!.createPost, style: listTitleTextStyle),
+        Text(AppLocalizations.of(context)!.createPost, style: listTitleTextStyle.apply(color: Theme.of(context).primaryColor)),
         Card(
           margin: const EdgeInsets.fromLTRB(0, 32, 0, 32),
           child: Container(
@@ -28,11 +30,11 @@ class AddPostPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(AppLocalizations.of(context)!.author, style: postTitleTextStyle),
-                TextField(autofocus: true, maxLines: null, onChanged: (value) => _title = value),
+                Text(AppLocalizations.of(context)!.title, style: postTitleTextStyle.apply(color: Theme.of(context).primaryColor)),
+                TextField(autofocus: true, maxLines: null, onChanged: (value) => _title = value, style: textFieldStyle),
                 Container(height: 78),
-                Text(AppLocalizations.of(context)!.content, style: postTitleTextStyle),
-                TextField(maxLines: null, onChanged: (value) => _content = value),
+                Text(AppLocalizations.of(context)!.content, style: postTitleTextStyle.apply(color: Theme.of(context).primaryColor)),
+                TextField(maxLines: null, onChanged: (value) => _content = value, style: textFieldStyle),
               ],
             ),
           )
@@ -60,8 +62,8 @@ class AddPostPage extends StatelessWidget {
     if (_title.isEmpty) {
       Toast.show(
         AppLocalizations.of(context)!.titleNotEmpty, 
-        backgroundColor: orange, 
-        textStyle: subTextStyle, 
+        backgroundColor: Theme.of(context).primaryColor, 
+        textStyle: subTextStyle.apply(color: Theme.of(context).colorScheme.tertiary), 
         gravity: Toast.bottom,
         duration: 2
       );

@@ -36,7 +36,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var title = _pickTitle(searchAuthor, user);
+    var title = _pickTitle(context, searchAuthor, user);
 
     return ListView(
         scrollDirection: Axis.vertical,
@@ -57,7 +57,7 @@ class HomePageState extends State<HomePage> {
               }
 
               return Wrap(
-                children: _mapPosts(snapshot.data!),
+                children: _mapPosts(context, snapshot.data!),
               );
             }
           ),
@@ -68,7 +68,7 @@ class HomePageState extends State<HomePage> {
               children: [
                 FloatingActionButton(
                   heroTag: 'clear_search_btn',
-                  onPressed: () { 
+                  onPressed: () {
                     setState(() {
                       searchAuthor = null;
                       searchTitle = null;
@@ -123,31 +123,33 @@ class HomePageState extends State<HomePage> {
       );
   }
 
-  Text _pickTitle(String? search, User user) {
+  Text _pickTitle(BuildContext context, String? search, User user) {
+    var style = listTitleTextStyle.apply(color: Theme.of(context).primaryColor);
+
     if (search == null || search.isEmpty) {
-      return Text(AppLocalizations.of(context)!.recentPosts, style: listTitleTextStyle);
+      return Text(AppLocalizations.of(context)!.recentPosts, style: style);
     }
 
     if (search == user.email!) {
-      return Text(AppLocalizations.of(context)!.myPosts, style: listTitleTextStyle);
+      return Text(AppLocalizations.of(context)!.myPosts, style: style);
     }
     
-    return Text("${AppLocalizations.of(context)!.searchedPosts} $search", style: listTitleTextStyle);
+    return Text("${AppLocalizations.of(context)!.searchedPosts} $search", style: style);
   }
 
-  List<Widget> _mapPosts(List<PostTileModel>? posts) => 
+  List<Widget> _mapPosts(BuildContext context, List<PostTileModel>? posts) => 
     posts?.asMap().entries
       .map((e) => Card(
         child: ListTile(
-          title: Text(e.value.title, style: postTitleTextStyle),
+          title: Text(e.value.title, style: postTitleTextStyle.apply(color: Theme.of(context).primaryColor)),
           subtitle: RichText(
             textAlign: TextAlign.end,
             text: TextSpan(
-              style: const TextStyle(fontSize: 12, color: Colors.black),
+              style: const TextStyle(fontSize: 12),
               children: [
                 TextSpan(
                   text: e.value.author.getDisplayInfo(), 
-                  style: TextStyle(color: red),
+                  style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () { 
                       setState(() {
@@ -156,7 +158,7 @@ class HomePageState extends State<HomePage> {
                       }); 
                     }
                 ),
-                TextSpan(text: ", ${e.value.addedAt.day}.${e.value.addedAt.month}.${e.value.addedAt.year}"),
+                TextSpan(text: ", ${e.value.addedAt.day}.${e.value.addedAt.month}.${e.value.addedAt.year}", style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
               ]
             ),
           ) ,

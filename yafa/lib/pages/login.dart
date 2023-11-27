@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(AppLocalizations.of(context)!.signin, style: titleTextStyle),
+            Text(AppLocalizations.of(context)!.signin, style: titleTextStyle.apply(color: Theme.of(context).colorScheme.secondary)),
             SignInButton(
               Buttons.Google,
               text: AppLocalizations.of(context)!.googleSignIn, 

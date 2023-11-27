@@ -10,8 +10,10 @@ class SearchDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textFieldStyle = TextStyle(color: Theme.of(context).primaryColor);
+    
     return Dialog(
-      backgroundColor: orange,
+      backgroundColor: Theme.of(context).primaryColor,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -20,10 +22,10 @@ class SearchDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Text("Author:"),
-            TextField(autofocus: true, maxLines: null, onChanged: (value) => _author = value),
+            TextField(autofocus: true, maxLines: null, onChanged: (value) => _author = value, style: textFieldStyle,),
             const SizedBox(height: 24),
             const Text("Title:"),
-            TextField(autofocus: true, maxLines: null, onChanged: (value) => _title = value),
+            TextField(autofocus: true, maxLines: null, onChanged: (value) => _title = value, style: textFieldStyle,),
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

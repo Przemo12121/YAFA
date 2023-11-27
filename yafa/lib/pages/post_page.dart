@@ -42,15 +42,15 @@ class PostPageState extends State<PostPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: Text(post.title, style: postTitleTextStyle),
+                title: Text(post.title, style: postTitleTextStyle.apply(color: Theme.of(context).primaryColor)),
                 subtitle: RichText(
                   textAlign: TextAlign.end,
                   text: TextSpan(
-                    style: const TextStyle(fontSize: 12, color: Colors.black),
+                    style: const TextStyle(fontSize: 12),
                     children: [
                       TextSpan(
                         text: post.author.getDisplayInfo(), 
-                        style: TextStyle(color: red),
+                        style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
                       ),
                       TextSpan(text: ", ${post.addedAt.day}.${post.addedAt.month}.${post.addedAt.year}"),
                     ]
@@ -59,14 +59,14 @@ class PostPageState extends State<PostPage> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(18, 10, 18, 14),
-                child: Text(post.content)
+                child: Text(post.content, style: TextStyle(color: Theme.of(context).colorScheme.secondary))
               )
             ],
           ),
         ),
         const SizedBox(height: 36),
-        Text(AppLocalizations.of(context)!.comments, style: listTitleTextStyle),
-        ..._mapComments(post),
+        Text(AppLocalizations.of(context)!.comments, style: listTitleTextStyle.apply(color: Theme.of(context).primaryColor)),
+        ..._mapComments(context, post),
         Container(
             margin: const EdgeInsets.fromLTRB(0, 32, 0, 0),
             child: Row(
@@ -98,7 +98,9 @@ class PostPageState extends State<PostPage> {
     );
   }
 
-  List<Widget> _mapComments(PostModel post) {
+  List<Widget> _mapComments(BuildContext context, PostModel post) {
+    var commentStyle = commentContentTextStyle.apply(color: Theme.of(context).colorScheme.secondary);
+
     return post.comments.map((e) => Card(
      child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -108,12 +110,12 @@ class PostPageState extends State<PostPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(e.author.getDisplayInfo(), style: commentAuthorTextStyle),
+                Text(e.author.getDisplayInfo(), style: commentAuthorTextStyle.apply(color: Theme.of(context).primaryColor)),
                 const SizedBox(height: 30),
-                Text("${e.addedAt.day}.${e.addedAt.month}.${e.addedAt.year}", style: commentContentTextStyle)
+                Text("${e.addedAt.day}.${e.addedAt.month}.${e.addedAt.year}", style: commentStyle)
               ],
             ),
-            Text(e.content, style: commentContentTextStyle)
+            Text(e.content, style: commentStyle)
           ],
         ),
       )     

@@ -28,6 +28,12 @@ class Yafa extends StatefulWidget {
 
 class YafaState extends State<Yafa> {
   YafaState() {
+    callback = (dark) => setState(() {
+      // _isDarkTheme = dark;
+      // _isDarkTheme = !_isDarkTheme;
+      isDarkTheme = !isDarkTheme;
+    });  
+
     FirebaseAuth
       .instance
       .userChanges()
@@ -37,6 +43,14 @@ class YafaState extends State<Yafa> {
         });
       });
   }
+
+
+  // void changeTheme(bool dark) {
+  //   setState(() {
+  //     // _isDarkTheme = dark;
+  //     _isDarkTheme = !_isDarkTheme;
+  //   });  
+  // }
 
   User? _user;
 
@@ -58,30 +72,7 @@ class YafaState extends State<Yafa> {
         Locale("pl"),
         Locale("de"),
       ],
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: orange, 
-          primary: orange,
-          secondary: white,
-          background: white,
-        ),
-        useMaterial3: true,
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: red,
-          foregroundColor: white,
-          iconSize: 36
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(red),
-            foregroundColor: MaterialStateProperty.all(white),
-            textStyle: MaterialStateProperty.all(buttonTextStyle),
-            padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(16, 0, 16, 0)),
-            elevation: MaterialStateProperty.all(3.0),
-            shape: MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)))),
-          )
-        ),
-      ),
+      theme: isDarkTheme ? darkTheme : lightTheme,
       home: Builder(
         builder: (context) => MainLayout(title: AppLocalizations.of(context)!.appTitle, body: body, user: _user),
       ) 

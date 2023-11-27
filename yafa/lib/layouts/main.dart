@@ -24,9 +24,10 @@ class MainLayout extends StatelessWidget {
         children: [
           titleText, 
           IconButton(
-            icon: Icon(Icons.account_box_rounded, color: red),
+            icon: Icon(Icons.account_box_rounded, color: Theme.of(context).colorScheme.tertiary),
             iconSize: 36,
             onPressed: () => signOut(),
+            // onPressed: () => callThemeChanged(true),
           ), 
         ]
       ); 
